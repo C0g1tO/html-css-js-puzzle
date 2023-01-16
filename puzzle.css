@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, Helvetica, sans-serif, Helvetica, sans-serif;
+    text-align: center;
+    color: red;
+    background-image: url("berzerk_10.jpg");
+    background-size: cover;
+    background-color: black;
+}
+
+#title {
+    height: 150px;
+    width: 400px;
+}
+
+#board {
+    width: 498px;
+    height: 498px;
+    background-color: black;
+    border: 10px solid red;
+
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#board img {
+    width: 164px;
+    height: 164px;
+    border: 1px solid red;
+}
