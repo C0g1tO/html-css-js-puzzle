@@ -9,18 +9,59 @@ var turns = 0;
 
 const ordercon = new Map([]);  //empty map array for puzzle tile/coordinate match entries
 
-// var imgOrder = ["berzerk_1", "berzerk_2", "berzerk_3", "berzerk_4", "berzerk_5", "berzerk_6", "berzerk_7", "berzerk_8", "berzerk_9"]
+// var imgOrder = ["berzerk_1", "berzerk_8", "berzerk_2", "berzerk_9", "berzerk_4", "berzerk_3", "berzerk_7", "berzerk_6", "berzerk_5"];
 // var imgOrder = ["berzerk_4", "berzerk_2", "berzerk_8", "berzerk_5", "berzerk_1", "berzerk_6", "berzerk_7", "berzerk_9", "berzerk_3"]; //odd inversions, not solvable
 // var imgOrder = ["berzerk_9", "berzerk_4", "berzerk_2", "berzerk_8", "berzerk_1", "berzerk_6", "berzerk_7", "berzerk_5", "berzerk_3"];
 const imgOrder = ["berzerk_9", "berzerk_4", "berzerk_2", "berzerk_8", "berzerk_1", "berzerk_6", "berzerk_7", "berzerk_5", "berzerk_3"];
 
 //current problem with randomization:  tiles can be arranged into a "non-solvable puzzle"
-function shuffleArray(imgOrder) {
-    imgOrder.sort(() => Math.random() - 0.5);
+// function shuffleArray(imgOrder) {
+//     imgOrder.sort(() => Math.random() - 0.5);
+// }
+
+// shuffleArray(imgOrder);
+// console.log(imgOrder);
+
+
+// JavaScript program to check if a given
+// instance of 8 puzzle is solvable or not
+// A utility function to count inversions
+// in given array 'arr[]'
+function getInvCount(arr) {
+	let inv_count = 0 ;
+	for(let i=0; i<2; i++) {
+		for(let j=i+1; j<3; j++) {
+		
+			// Value 0 is used for empty space
+			if (arr[j][i] > 0 && arr[j][i] > arr[i][j]) {
+				inv_count += 1;
+            }
+		}
+	}
+    // console.log(inv_count);
+	return inv_count;
+    
+}
+// This function returns true
+// if given 8 puzzle is solvable.
+function isSolvable(puzzle) {
+	// Count inversions in given 8 puzzle
+	let invCount = getInvCount(puzzle);
+	// return true if inversion count is even.
+    // console.log(invCount);
+	return (invCount % 2 == 0);
+}
+// Driver code
+// Value 0 is used for empty space
+// puzzle = [[4, 2, 8],[5, 1, 6],[7, 0, 3]];  //should be unsolvable
+puzzle = [[1, 8, 2],[0, 4, 3],[7, 6, 5]];  //should be solvable
+
+if(isSolvable(puzzle)) {
+	document.write("Solvable");
+} else {
+	document.write("Not Solvable");
 }
 
-shuffleArray(imgOrder);
-// console.log(imgOrder);
 
 window.onload = function() {
     //below creates rows and columns
