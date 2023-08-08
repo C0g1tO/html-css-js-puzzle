@@ -1,4 +1,3 @@
-
 var rows = 3;
 var columns = 3;
 
@@ -7,61 +6,43 @@ var otherTile;  //blank tile
 
 var turns = 0;
 
-const ordercon = new Map([]);  //empty map array for puzzle tile/coordinate match entries
+const ordercon = new Map([]);  //empty map array to track correct tile positions
 
-// var imgOrder = ["berzerk_1", "berzerk_8", "berzerk_2", "berzerk_9", "berzerk_4", "berzerk_3", "berzerk_7", "berzerk_6", "berzerk_5"];
-// var imgOrder = ["berzerk_4", "berzerk_2", "berzerk_8", "berzerk_5", "berzerk_1", "berzerk_6", "berzerk_7", "berzerk_9", "berzerk_3"]; //odd inversions, not solvable
-// var imgOrder = ["berzerk_9", "berzerk_4", "berzerk_2", "berzerk_8", "berzerk_1", "berzerk_6", "berzerk_7", "berzerk_5", "berzerk_3"];
-const imgOrder = ["berzerk_9", "berzerk_4", "berzerk_2", "berzerk_8", "berzerk_1", "berzerk_6", "berzerk_7", "berzerk_5", "berzerk_3"];
+var randomTile = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 
-//current problem with randomization:  tiles can be arranged into a "non-solvable puzzle"
-// function shuffleArray(imgOrder) {
-//     imgOrder.sort(() => Math.random() - 0.5);
-// }
+function shuffleArray(randomTile) {
+    randomTile.sort(() => Math.random() - 0.5);
+}
 
-// shuffleArray(imgOrder);
-// console.log(imgOrder);
+shuffleArray(randomTile);
 
-
-// JavaScript program to check if a given
-// instance of 8 puzzle is solvable or not
-// A utility function to count inversions
-// in given array 'arr[]'
 function getInvCount(arr) {
-	let inv_count = 0 ;
-	for(let i=0; i<2; i++) {
-		for(let j=i+1; j<3; j++) {
-		
+	let inv_count = 0;
+	for (let i = 0; i < 9; i++) {
+		for (let j = i + 1; j < 9; j++) {
+
 			// Value 0 is used for empty space
-			if (arr[j][i] > 0 && arr[j][i] > arr[i][j]) {
+			if (arr[i] > 0 && arr[j] > 0 && arr[i] > arr[j]) {
 				inv_count += 1;
+                console.log(inv_count);
             }
 		}
 	}
-    // console.log(inv_count);
-	return inv_count;
-    
-}
-// This function returns true
-// if given 8 puzzle is solvable.
-function isSolvable(puzzle) {
-	// Count inversions in given 8 puzzle
-	let invCount = getInvCount(puzzle);
-	// return true if inversion count is even.
-    // console.log(invCount);
-	return (invCount % 2 == 0);
-}
-// Driver code
-// Value 0 is used for empty space
-// puzzle = [[4, 2, 8],[5, 1, 6],[7, 0, 3]];  //should be unsolvable
-puzzle = [[1, 8, 2],[0, 4, 3],[7, 6, 5]];  //should be solvable
-
-if(isSolvable(puzzle)) {
-	document.write("Solvable");
-} else {
-	document.write("Not Solvable");
+	return inv_count;   
 }
 
+function isSolvable(randomTile) {
+	// Count inversions in given 3x3 slide puzzle
+	let invCount = getInvCount(randomTile);
+	
+	return (invCount % 2 == 0);  //returns TRUE if division yields no remainder, inversion count is even
+}
+
+while (isSolvable(randomTile) == false) {
+    shuffleArray(randomTile);
+}
+
+tileOrder = randomTile;
 
 window.onload = function() {
     //below creates rows and columns
@@ -71,7 +52,7 @@ window.onload = function() {
             //<img id="0-0" src="berzerk_1.jpg">, creates coordinate and relates an image
             let tile = document.createElement("img");
             tile.id = r.toString() + "-" + c.toString();
-            tile.src = imgOrder.shift() + ".jpg";
+			tile.src = "berzerk_" + tileOrder.shift() + ".jpg";
 
             //Drag functionality
             tile.addEventListener("dragstart", dragStart);  //click an image to drag
@@ -83,38 +64,36 @@ window.onload = function() {
 
             document.getElementById("board").append(tile);
 
-            // console.log(tile.src);
-
-            //checks initial tile config for matching tile/coords and adds to map
-            if (tile.id == "0-0" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_1.jpg") {
+            //Below checks initial tile config for matching tile positions and updates "ordercon"
+            if (tile.id == "0-0" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_1.jpg") {
                 ordercon.set("berzerk_1");
             }
 
-            if (tile.id == "0-1" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_2.jpg") {
+            if (tile.id == "0-1" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_2.jpg") {
                 ordercon.set("berzerk_2");
             }
 
-            if (tile.id == "0-2" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_3.jpg") {
+            if (tile.id == "0-2" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_3.jpg") {
                 ordercon.set("berzerk_3");
             }
 
-            if (tile.id == "1-0" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_4.jpg") {
+            if (tile.id == "1-0" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_4.jpg") {
                 ordercon.set("berzerk_4");
             }
 
-            if (tile.id == "1-1" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_5.jpg") {
+            if (tile.id == "1-1" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_5.jpg") {
                 ordercon.set("berzerk_5");
             }
 
-            if (tile.id == "1-2" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_6.jpg") {
+            if (tile.id == "1-2" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_6.jpg") {
                 ordercon.set("berzerk_6");
             }
 
-            if (tile.id == "2-0" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_7.jpg") {
+            if (tile.id == "2-0" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_7.jpg") {
                 ordercon.set("berzerk_7");
             }
 
-            if (tile.id == "2-1" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_8.jpg") {
+            if (tile.id == "2-1" && tile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_8.jpg") {
                 ordercon.set("berzerk_8");
             }
         }
@@ -124,44 +103,37 @@ window.onload = function() {
 function dragStart() {
     currTile = this; //this refers to the img tile being dragged
 
-    if (currTile.id == "0-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_1.jpg") {
+    //Below checks for correct tile positions that are moved out into incorrect positions, updates "ordercon"
+    if (currTile.id == "0-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_1.jpg") {
         ordercon.delete("berzerk_1");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "0-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_2.jpg") {
+    if (currTile.id == "0-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_2.jpg") {
         ordercon.delete("berzerk_2");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "0-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_3.jpg") {
+    if (currTile.id == "0-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_3.jpg") {
         ordercon.delete("berzerk_3");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "1-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_4.jpg") {
+    if (currTile.id == "1-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_4.jpg") {
         ordercon.delete("berzerk_4");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "1-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_5.jpg") {
+    if (currTile.id == "1-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_5.jpg") {
         ordercon.delete("berzerk_5");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "1-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_6.jpg") {
+    if (currTile.id == "1-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_6.jpg") {
         ordercon.delete("berzerk_6");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "2-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_7.jpg") {
+    if (currTile.id == "2-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_7.jpg") {
         ordercon.delete("berzerk_7");
-        console.log(ordercon);
     }
 
-    if (currTile.id == "2-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_8.jpg") {
+    if (currTile.id == "2-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_8.jpg") {
         ordercon.delete("berzerk_8");
-        console.log(ordercon);
     }
 }
 
@@ -179,55 +151,46 @@ function dragLeave() {
 
 function dragDrop() {
     otherTile = this; //this refers to the img tile being dropped on
-    // console.log(otherTile);
 
-    if (otherTile.id == "0-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_1.jpg") {
+    if (otherTile.id == "0-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_1.jpg") {
         ordercon.set("berzerk_1");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "0-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_2.jpg") {
+    if (otherTile.id == "0-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_2.jpg") {
         ordercon.set("berzerk_2");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "0-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_3.jpg") {
+    if (otherTile.id == "0-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_3.jpg") {
         ordercon.set("berzerk_3");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "1-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_4.jpg") {
+    if (otherTile.id == "1-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_4.jpg") {
         ordercon.set("berzerk_4");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "1-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_5.jpg") {
+    if (otherTile.id == "1-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_5.jpg") {
         ordercon.set("berzerk_5");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "1-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_6.jpg") {
+    if (otherTile.id == "1-2" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_6.jpg") {
         ordercon.set("berzerk_6");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "2-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_7.jpg") {
+    if (otherTile.id == "2-0" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_7.jpg") {
         ordercon.set("berzerk_7");
-        console.log(ordercon);
     }
 
-    if (otherTile.id == "2-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html_TESTING/berzerk_8.jpg") {
+    if (otherTile.id == "2-1" && currTile.src == "file:///C:/Users/nhguu/Desktop/puzzle%20in%20html/berzerk_8.jpg") {
         ordercon.set("berzerk_8");
-        console.log(ordercon);
     }
 
     if (ordercon.size == 8) {
-        window.alert("GOOD JOB!!!");
+        window.alert("Puzzle solved, GOOD JOB!!!");
     }
 }
 
 function dragEnd() {
-    if (!otherTile.src.includes("berzerk_9.jpg")) {
+    if (!otherTile.src.includes("berzerk_0.jpg")) {
         return;
     }
 
